@@ -20,7 +20,7 @@ Setup database
 ![alt text](https://github.com/kadekchrisna/tiket/blob/master/assets/loket.jpg?raw=true)
 
 ```
-create scheme with name loket
+create scheme with name tiket
 
 import script tiket.sql
 ```
