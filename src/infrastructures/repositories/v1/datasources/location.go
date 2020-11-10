@@ -8,7 +8,17 @@ import (
 	"tiket.vip/src/domains"
 )
 
-func (r *Repos) GetLocation(id string) (*domains.Location, error) {
+type LocRepos struct {
+	db *gorm.DB
+}
+
+func NewLocRepo(db *gorm.DB) domains.LocRepo {
+	return &LocRepos{
+		db: db,
+	}
+}
+
+func (r *LocRepos) GetLocation(id string) (*domains.Location, error) {
 	var loc domains.Location
 
 	if err := r.db.Where("id_location = ?", id).First(&loc).Error; err != nil {

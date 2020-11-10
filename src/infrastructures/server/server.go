@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"tiket.vip/src/infrastructures/configs"
+	loggers "tiket.vip/src/infrastructures/logger"
 	orm "tiket.vip/src/infrastructures/orm/gorm"
 	routers "tiket.vip/src/interfaces/routes/v1"
 )
@@ -43,7 +44,7 @@ func Serve() {
 	if errDb != nil {
 		log.Panic(fmt.Sprintf("Error connecting db, %s", errOrm.Error()))
 	}
-
+	loggers.Init()
 	e := New()
 	h := routers.NewHandler(orm)
 	v1 := e.Group("/api")

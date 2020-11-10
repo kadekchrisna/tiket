@@ -23,6 +23,31 @@ func (ec *EventController) GetAllEvents(c echo.Context) error {
 	}
 	return c.JSON(result.Status, result)
 }
+func (ec *EventController) GetAllEventsPaginate(c echo.Context) error {
+	ep := domains.EventPagi{
+		EventName:      c.QueryParam("eventName"),
+		EventCreatedAt: c.QueryParam("eventCreated"),
+		LocName:        c.QueryParam("locName"),
+		LocAddress:     c.QueryParam("locAddress"),
+		LocCountry:     c.QueryParam("locCountry"),
+		EndDate:        c.QueryParam("endDate"),
+		StartDate:      c.QueryParam("startDate"),
+	}
+
+	if err := ep.Validate(c.QueryParam("limit"), c.QueryParam("offset"), c.QueryParam("order")); err != nil {
+		rf := configs.ResponseError{
+			Status:  400,
+			Message: "FAILED",
+			Cause:   err.Error(),
+		}
+		return c.JSON(rf.Status, rf)
+	}
+	result, err := ec.UseCase.GetAllEventsPaginate(ep)
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(result.Status, result)
+}
 
 func (ec *EventController) GetEvent(c echo.Context) error {
 	result, err := ec.UseCase.GetEvent(c.Param("id"))

@@ -15,13 +15,14 @@ type Handler struct {
 
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
-		Event: controllers.NewEventController(usecase.NewEventUseCase(datasources.NewRepo(db))),
+		Event: controllers.NewEventController(usecase.NewEventUseCase(datasources.NewEventRepo(db), datasources.NewLocRepo(db))),
 	}
 }
 
 func (h *Handler) Register(v1 *echo.Group) {
 	ev := v1.Group("/event")
 	ev.GET("/all", h.Event.GetAllEvents)
+	ev.GET("/all/paginate", h.Event.GetAllEventsPaginate)
 	ev.GET("/get_info/:id", h.Event.GetEvent)
 	ev.POST("/create", h.Event.CreateEvent)
 	ev.PUT("/update", h.Event.UpdateEvent)
