@@ -8,6 +8,7 @@ import (
 	valid "github.com/asaskevich/govalidator"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"tiket.vip/src/domains"
 )
 
@@ -33,7 +34,7 @@ func (r *EventRepos) GetEvent(id string) (*domains.Event, error) {
 	var event domains.Event
 	var err error
 	if err = r.db.Preload("Location").Where("id_event = ?", id).First(&event).Error; err != nil {
-		if errors.Is(err, gorm.ErrEmptySlice) {
+		if err.Error() == gorm.ErrRecordNotFound.Error() {
 			return nil, errors.New(fmt.Sprintf("event with id %s is not found", id))
 		}
 		return nil, err
@@ -47,15 +48,15 @@ func (r *EventRepos) GetEvent(id string) (*domains.Event, error) {
 
 func (r *EventRepos) CreateEvent(ev domains.Event) (*domains.Event, error) {
 	var event domains.Event
-	result := r.db.Create(&ev)
+	result := r.db.Omit(clause.Associations).Create(&ev)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	event = ev
-	// logrus.WithFields(logrus.Fields{
-	// 	"ev": ev,
-	// }).Debug("ev")
+	logrus.WithFields(logrus.Fields{
+		"ev": ev,
+	}).Debug("ev-----")
 	return &event, nil
 }
 

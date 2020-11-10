@@ -175,20 +175,18 @@ func (e *Event) Bind(c echo.Context) error {
 func (e *Event) BeforeCreate(tx *gorm.DB) (err error) {
 	var event Event
 	var count int64
-	for {
+	if e.ID == "" {
 		e.ID = uuid.New().String()
+	}
+	for {
 		if err := tx.Model(&event).Where("id_event = ?", e.ID).Count(&count).Error; err != nil {
 			return err
 		}
 		if count < 1 {
 			break
 		}
+		e.ID = uuid.New().String()
 	}
 
 	return
-}
-
-type DB interface {
-	Preload(query string, args ...interface{}) (tx *gorm.DB)
-	Find(dest interface{}, conds ...interface{}) (tx *DB)
 }
