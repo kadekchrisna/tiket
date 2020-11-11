@@ -1,7 +1,6 @@
 package domains
 
 import (
-	"database/sql"
 	"errors"
 	"strconv"
 	"strings"
@@ -19,15 +18,15 @@ func (Event) TableName() string {
 }
 
 type Event struct {
-	ID         string         `gorm:"column:id_event;PRIMARY_KEY" json:"id_event" `
-	IDLocation string         `gorm:"column:id_location" json:"id_location" validate:"required"`
-	Location   Location       `gorm:"foreignkey:IDLocation" json:"location"`
-	Name       string         `json:"name" validate:"required"`
-	Desc       string         `json:"desc" validate:"required"`
-	StartDate  string         `gorm:"column:start_date" json:"start_date" validate:"required"`
-	EndDate    string         `gorm:"column:end_date" json:"end_date" validate:"required"`
-	CreatedAt  sql.NullString `json:"created_at"`
-	UpdatedAt  sql.NullString `json:"updated_at"`
+	ID         string    `gorm:"column:id_event;PRIMARY_KEY" json:"id_event" `
+	IDLocation string    `gorm:"column:id_location" json:"id_location" validate:"required"`
+	Location   *Location `gorm:"foreignkey:IDLocation" json:"location,omitempty"`
+	Name       string    `json:"name" validate:"required"`
+	Desc       string    `json:"desc" validate:"required"`
+	StartDate  string    `gorm:"column:start_date" json:"start_date" validate:"required"`
+	EndDate    string    `gorm:"column:end_date" json:"end_date" validate:"required"`
+	CreatedAt  *string   `json:"created_at,omitempty"`
+	UpdatedAt  *string   `json:"updated_at,omitempty"`
 }
 
 type EventPagi struct {

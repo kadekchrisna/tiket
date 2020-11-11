@@ -63,7 +63,7 @@ func (eu *EventUseCase) CreateEvent(ev domains.Event) (*configs.ResponseSuccess,
 		return nil, configs.Failed(400, "FAILED", err.Error())
 	}
 
-	event.Location = *loc
+	event.Location = loc
 	return configs.Success(200, "OK", event), nil
 }
 
@@ -78,7 +78,7 @@ func (eu *EventUseCase) UpdateEvent(ev domains.Event) (*configs.ResponseSuccess,
 		return nil, configs.Failed(400, "FAILED", err.Error())
 	}
 
-	event.Location = *loc
+	event.Location = loc
 	return configs.Success(200, "OK", event), nil
 }
 

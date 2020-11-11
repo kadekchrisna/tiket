@@ -29,3 +29,22 @@ func (r *LocRepos) GetLocation(id string) (*domains.Location, error) {
 	}
 	return &loc, nil
 }
+
+func (r *LocRepos) CreateLocation(loc domains.Location) (*domains.Location, error) {
+	var location domains.Location
+	trx := r.db.Begin()
+	result := trx.Create(&loc)
+	if result.Error != nil {
+
+		if err := trx.Rollback().Error; err != nil {
+			return nil, err
+		}
+		return nil, result.Error
+	}
+
+	if err := trx.Commit().Error; err != nil {
+		return nil, err
+	}
+	location = loc
+	return &location, nil
+}

@@ -10,12 +10,14 @@ import (
 )
 
 type Handler struct {
-	Event domains.EventController
+	Event    domains.EventController
+	Location domains.LocController
 }
 
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
-		Event: controllers.NewEventController(usecase.NewEventUseCase(datasources.NewEventRepo(db), datasources.NewLocRepo(db))),
+		Event:    controllers.NewEventController(usecase.NewEventUseCase(datasources.NewEventRepo(db), datasources.NewLocRepo(db))),
+		Location: controllers.NewLocController(usecase.NewLocUseCase(datasources.NewLocRepo(db))),
 	}
 }
 
@@ -27,4 +29,7 @@ func (h *Handler) Register(v1 *echo.Group) {
 	ev.POST("/create", h.Event.CreateEvent)
 	ev.PUT("/update", h.Event.UpdateEvent)
 	ev.DELETE("/delete/:id", h.Event.DeleteEvent)
+
+	loc := v1.Group("/location")
+	loc.POST("/create", h.Location.CreateLocation)
 }
