@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/gommon/log"
 	"tiket.vip/src/infrastructures/configs"
 	loggers "tiket.vip/src/infrastructures/logger"
+	"tiket.vip/src/infrastructures/middlewares"
 	orm "tiket.vip/src/infrastructures/orm/gorm"
 	routers "tiket.vip/src/interfaces/routes/v1"
 )
@@ -46,7 +47,11 @@ func Serve() {
 	}
 	loggers.Init()
 	e := New()
+
+	authMiddle := middlewares.NewAuthMiddleware(orm)
+
 	h := routers.NewHandler(orm)
+	e.Use(authMiddle.MiddleGate())
 	v1 := e.Group("/api")
 	h.Register(v1)
 
@@ -61,6 +66,8 @@ func Serve() {
 }
 
 func New() *echo.Echo {
+	eHandler := middlewares.NewErrorMiddleware()
+
 	e := echo.New()
 	e.Logger.SetLevel(log.DEBUG)
 	e.Pre(middleware.RemoveTrailingSlash())
@@ -74,6 +81,7 @@ func New() *echo.Echo {
 	}))
 
 	e.Validator = configs.NewValidator()
+	e.HTTPErrorHandler = eHandler.HttpErrorHandler
 
 	return e
 }

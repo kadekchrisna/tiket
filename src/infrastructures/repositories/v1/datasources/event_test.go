@@ -165,7 +165,7 @@ func TestCreateEventSuccess(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 
@@ -191,7 +191,7 @@ func TestUpdateEventSuccess(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 
@@ -212,7 +212,7 @@ func TestUpdateEventFailedNotFound(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 
@@ -232,7 +232,7 @@ func TestUpdateEventFailedError(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 
@@ -252,7 +252,7 @@ func TestDeleteEventSuccess(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 
@@ -274,7 +274,7 @@ func TestDeleteEventFailed(t *testing.T) {
 	errFaker := faker.FakeData(&mockEvent)
 	assert.NoError(t, errFaker)
 	mockEvent.ID = id
-	mockEvent.Location = domains.Location{}
+	mockEvent.Location = &domains.Location{}
 	mockEvent.StartDate = "2006-01-02 15:04:05"
 	mockEvent.EndDate = "2006-01-02 15:04:05"
 

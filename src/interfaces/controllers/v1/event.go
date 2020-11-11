@@ -52,6 +52,7 @@ func (ec *EventController) GetAllEventsPaginate(c echo.Context) error {
 func (ec *EventController) GetEvent(c echo.Context) error {
 	result, err := ec.UseCase.GetEvent(c.Param("id"))
 	if err != nil {
+		// return errors.New("ERROR")
 		return c.JSON(err.Status, err)
 	}
 	return c.JSON(result.Status, result)

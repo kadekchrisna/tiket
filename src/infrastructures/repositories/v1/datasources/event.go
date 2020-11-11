@@ -128,9 +128,11 @@ func (r *EventRepos) GetAllEventsPaginate(ep domains.EventPagi) (*domains.Events
 		defer rows.Close()
 		for rows.Next() {
 			var event domains.Event
-			if err := rows.Scan(&event.ID, &event.IDLocation, &event.Name, &event.Desc, &event.StartDate, &event.EndDate, &event.CreatedAt, &event.UpdatedAt, &event.Location.ID, &event.Location.Name, &event.Location.Address, &event.Location.Street, &event.Location.City, &event.Location.Country, &event.Location.Zip, &event.Location.Latitude, &event.Location.Longitude, &event.Location.CreatedAt, &event.Location.UpdatedAt); err != nil {
+			var location domains.Location
+			if err := rows.Scan(&event.ID, &event.IDLocation, &event.Name, &event.Desc, &event.StartDate, &event.EndDate, &event.CreatedAt, &event.UpdatedAt, &location.ID, &location.Name, &location.Address, &location.Street, &location.City, &location.Country, &location.Zip, &location.Latitude, &location.Longitude, &location.CreatedAt, &location.UpdatedAt); err != nil {
 				return nil, err
 			}
+			event.Location = &location
 			events.Events = append(events.Events, event)
 		}
 	} else {

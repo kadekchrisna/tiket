@@ -20,7 +20,6 @@ func NewLocRepo(db *gorm.DB) domains.LocRepo {
 
 func (r *LocRepos) GetLocation(id string) (*domains.Location, error) {
 	var loc domains.Location
-
 	if err := r.db.Where("id_location = ?", id).First(&loc).Error; err != nil {
 		if err.Error() == gorm.ErrRecordNotFound.Error() {
 			return nil, errors.New(fmt.Sprintf("location with id %s is not found", id))
