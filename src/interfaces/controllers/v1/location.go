@@ -28,3 +28,15 @@ func (lc *LocationController) CreateLocation(c echo.Context) error {
 	}
 	return c.JSON(result.Status, result)
 }
+func (lc *LocationController) SearchItem(c echo.Context) error {
+	var query domains.EsQuery
+	if err := c.Bind(&query); err != nil {
+		failed := configs.Failed(400, "FAILED", err.Error())
+		return c.JSON(failed.Status, failed)
+	}
+	result, errItem := lc.UseCase.SearchItem(query)
+	if errItem != nil {
+		return c.JSON(errItem.Status, errItem)
+	}
+	return c.JSON(result.Status, result)
+}

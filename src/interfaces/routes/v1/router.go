@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	usecase "tiket.vip/src/applications/usecases/v1"
 	"tiket.vip/src/domains"
+	elastics "tiket.vip/src/infrastructures/elastic"
 	"tiket.vip/src/infrastructures/repositories/v1/datasources"
 	"tiket.vip/src/interfaces/controllers/v1"
 )
@@ -14,10 +15,11 @@ type Handler struct {
 	Location domains.LocController
 }
 
-func NewHandler(db *gorm.DB) *Handler {
+func NewHandler(db *gorm.DB, ec elastics.ESClientInterface) *Handler {
+
 	return &Handler{
 		Event:    controllers.NewEventController(usecase.NewEventUseCase(datasources.NewEventRepo(db), datasources.NewLocRepo(db))),
-		Location: controllers.NewLocController(usecase.NewLocUseCase(datasources.NewLocRepo(db))),
+		Location: controllers.NewLocController(usecase.NewLocUseCase(datasources.NewLocRepo(db), datasources.NewItemRepo(ec))),
 	}
 }
 
@@ -32,4 +34,5 @@ func (h *Handler) Register(v1 *echo.Group) {
 
 	loc := v1.Group("/location")
 	loc.POST("/create", h.Location.CreateLocation)
+	loc.POST("/search", h.Location.SearchItem)
 }

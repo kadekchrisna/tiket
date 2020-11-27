@@ -31,10 +31,12 @@ type LocRepo interface {
 }
 type LocUseCase interface {
 	CreateLocation(Location) (*configs.ResponseSuccess, *configs.ResponseError)
+	SearchItem(query EsQuery) (*configs.ResponseSuccess, *configs.ResponseError)
 }
 
 type LocController interface {
 	CreateLocation(echo.Context) error
+	SearchItem(echo.Context) error
 }
 
 func (l *Location) Bind(c echo.Context) error {

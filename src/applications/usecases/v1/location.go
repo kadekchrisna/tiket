@@ -6,12 +6,14 @@ import (
 )
 
 type LocationUseCase struct {
-	LocRepo domains.LocRepo
+	LocRepo  domains.LocRepo
+	ItemRepo domains.ItemRepo
 }
 
-func NewLocUseCase(lr domains.LocRepo) domains.LocUseCase {
+func NewLocUseCase(lr domains.LocRepo, ir domains.ItemRepo) domains.LocUseCase {
 	return &LocationUseCase{
-		LocRepo: lr,
+		LocRepo:  lr,
+		ItemRepo: ir,
 	}
 }
 
@@ -22,4 +24,12 @@ func (l *LocationUseCase) CreateLocation(loc domains.Location) (*configs.Respons
 	}
 
 	return configs.Success(200, "SUCCESS", location), nil
+}
+
+func (l *LocationUseCase) SearchItem(query domains.EsQuery) (*configs.ResponseSuccess, *configs.ResponseError) {
+	items, err := l.ItemRepo.Search(query)
+	if err != nil {
+		return nil, configs.Failed(400, "FAILED", err.Error())
+	}
+	return configs.Success(200, "SUCCESS", items), nil
 }

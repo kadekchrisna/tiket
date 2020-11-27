@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"tiket.vip/src/infrastructures/configs"
+	elastics "tiket.vip/src/infrastructures/elastic"
 	loggers "tiket.vip/src/infrastructures/logger"
 	"tiket.vip/src/infrastructures/middlewares"
 	orm "tiket.vip/src/infrastructures/orm/gorm"
@@ -50,7 +51,7 @@ func Serve() {
 
 	authMiddle := middlewares.NewAuthMiddleware(orm)
 
-	h := routers.NewHandler(orm)
+	h := routers.NewHandler(orm, elastics.Init())
 	e.Use(authMiddle.MiddleGate())
 	v1 := e.Group("/api")
 	h.Register(v1)
